@@ -3,18 +3,13 @@ import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from swagger import (
-    swaggerui_blueprint,
-)  # Importar aqui, se o swagger estiver configurado corretamente
+from swagger import swaggerui_blueprint  # Importar aqui, se o swagger estiver configurado corretamente
 
 app = Flask(__name__)
 CORS(app)
 
-# Configurar a URL do banco de dados usando uma variável de ambiente
-# Se DATABASE_URL não estiver definido, usará SQLite como fallback
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-    "sqlite:///school_db.sqlite"
-)
+# Configurar a URL do banco de dados diretamente para SQLite
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///school_db.sqlite"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
@@ -23,7 +18,7 @@ migrate = Migrate(app, db)
 # Importar e registrar o blueprint do Swagger após a criação do app
 app.register_blueprint(swaggerui_blueprint, url_prefix="/swagger")
 
-
+# Modelos e rotas
 class Aluno(db.Model):
     __tablename__ = "alunos"
     id = db.Column(db.Integer, primary_key=True)
@@ -45,12 +40,10 @@ class Aluno(db.Model):
             "numero_sala": self.numero_sala,
         }
 
-
 @app.route("/api/v1/alunos", methods=["GET"])
 def get_alunos():
     alunos = Aluno.query.all()
     return jsonify([aluno.as_dict() for aluno in alunos]), 200
-
 
 @app.route("/api/v1/alunos/<int:id>", methods=["GET"])
 def get_aluno(id):
@@ -58,7 +51,6 @@ def get_aluno(id):
     if aluno is None:
         return jsonify({"message": "Aluno não encontrado"}), 404
     return jsonify(aluno.as_dict()), 200
-
 
 @app.route("/api/v1/alunos", methods=["POST"])
 def create_aluno():
@@ -74,7 +66,6 @@ def create_aluno():
     db.session.add(novo_aluno)
     db.session.commit()
     return jsonify(novo_aluno.as_dict()), 201
-
 
 @app.route("/api/v1/alunos/<int:id>", methods=["PUT"])
 def update_aluno(id):
@@ -93,7 +84,6 @@ def update_aluno(id):
     db.session.commit()
     return jsonify(aluno.as_dict()), 200
 
-
 @app.route("/api/v1/alunos/<int:id>", methods=["DELETE"])
 def delete_aluno(id):
     aluno = Aluno.query.get(id)
@@ -103,7 +93,6 @@ def delete_aluno(id):
     db.session.delete(aluno)
     db.session.commit()
     return "", 204
-
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
