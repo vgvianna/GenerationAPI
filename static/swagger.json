@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "Esta é a API para gerenciar alunos",
+    "description": "Desafio Prático Generation - Victor Gabriel Pereira da Silva Vianna",
     "version": "1.0.0",
     "title": "API de Alunos",
     "contact": {
