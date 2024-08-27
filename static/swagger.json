@@ -8,10 +8,10 @@
       "email": "contato@escola.com"
     }
   },
-  "host": "localhost:5000",
+  "host": "generationapi.onrender.com",
   "basePath": "/api/v1",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/alunos": {
