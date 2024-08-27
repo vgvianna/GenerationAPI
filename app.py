@@ -13,7 +13,7 @@ CORS(app)
 # Configurar a URL do banco de dados usando uma variável de ambiente
 # Se DATABASE_URL não estiver definido, usará SQLite como fallback
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
-    "DATABASE_URL", "sqlite:///school_db.sqlite"
+    "sqlite:///school_db.sqlite"
 )
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
